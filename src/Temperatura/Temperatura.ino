@@ -6,6 +6,7 @@
 
 #include "Arduino.h"
 #include "Temperatura.h"
+#include <dht.h>
     
     /**
     * Normalizza la temperatura letta dal sensore in modo da essere gestita in modo opportuno

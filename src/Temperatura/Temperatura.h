@@ -7,7 +7,8 @@
 #define Temperatura_h
 
 #include "Arduino.h"
-#include "dht.h"
+#include <dht.h>
+
 
 class Temperatura{
   private:

@@ -1,6 +1,6 @@
 #include <dht.h>
 
-#define dht_dpin A0 //no ; here. Set equal to channel sensor is on
+#define dht_dpin 4
 
 dht DHT;
 
