@@ -1,8 +1,8 @@
 /*
   Temperatura.h - Library for read temperature from a DHT11.
-  Created by Matteo CalÃ², Davide Pastore and Alessandro Pendinelli on June 25, 2013.
+  Created by Matteo Calò, Davide Pastore and Alessandro Pendinelli on June 25, 2013.
   Released into the public domain.
-*/
+ */
 #ifndef Temperatura_h
 #define Temperatura_h
 
@@ -11,20 +11,20 @@
 
 
 class Temperatura{
-  private:
-    int temperatura;
-    int pin;
-    dht DHT;
-    int normalizza(int temperatura);
+private:
+	int temperatura;
+	int pin;
+	dht DHT;
+	int normalizza(int temperatura);
 
-  public:
+public:
 
-  
-    Temperatura(int pin);
-    int getTemperatura();
-    int getPin();
-    void readTemperatura();
-    void setPin(int pin);
+
+	Temperatura(int pin);
+	int getTemperatura();
+	int getPin();
+	void readTemperatura();
+	void setPin(int pin);
 };
 
 #endif
