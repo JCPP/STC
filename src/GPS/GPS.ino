@@ -6,6 +6,8 @@
 
 #include "Arduino.h"
 #include "GPS.h"
+#include <gps.h>
+#include <GSM.h>
 
 /**
  * Normalizza la GPS letta dal sensore in modo da essere gestita in modo opportuno
