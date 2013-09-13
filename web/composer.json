@@ -1,0 +1,14 @@
+{
+	"name" : "JCPP/STC",
+	"type" : "Web application",
+	"keywords" : [],
+	"require" : {
+		"php" : ">=5.3",
+		"slim/slim" : "2.*"
+	},
+	"autoload" : {
+		"psr-0" : {
+			"JCPP" : "src"
+		}
+	}
+}
