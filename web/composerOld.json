@@ -6,14 +6,12 @@
 		"twig/twig" : "1.*",
 		"php" : ">=5.3",
 		"slim/slim" : "2.*",
-		"j4mie/paris" : "1.*",
 		"slim/extras" : "2.0.3",
-		"slim/views" : "0.1.*",
-		"j4mie/idiorm" : "1.*"
+		"slim/views" : "0.1.*"
 	},
 	"autoload" : {
-		"classmap" : [
-			"app/lib/"
-		]
+		"psr-0" : {
+			"JCPP" : "src"
+		}
 	}
 }
