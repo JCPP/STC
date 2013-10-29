@@ -1,4 +1,5 @@
 <?php
-$app->get('/visualizza/', function () {
-	echo "Hello ";
+//Visualizzazione dei dati
+$app->get('/visualizza/', function () use ($app) {
+	$app->render('index.twig');
 });
