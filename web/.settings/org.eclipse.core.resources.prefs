@@ -1,3 +1,4 @@
 eclipse.preferences.version=1
 encoding//templates/base.twig=UTF-8
 encoding//templates/footer.twig=UTF-8
+encoding//templates/index.twig=UTF-8
