@@ -11,7 +11,7 @@ byte mac[] = { 0x90, 0xA2, 0xDA, 0xDE, 0xB2, 0x12 };
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
 //IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
-char server[] = "www.google.com";    // name address for Google (using DNS)
+char server[] = "192.168.0.112";    // name address for Google (using DNS)
 
 // Set the static IP address to use if the DHCP fails to assign
 IPAddress ip(192,168,0,177);
@@ -93,24 +93,29 @@ void loop() {
   lcd.setCursor(0, 0);   
   lcd.print(STAMPA_T,1); //SHOW ONLY THE FIRST DECIMAL
   lcd.write((uint8_t)0); //PRINT "°C" CHARACTER (IDE 1.0.1)
-  delay(200);
+  //delay(200);
 
   lcd.setCursor(6, 0);
   lcd.print(STAMPA_U,1);//SHOW ONLY THE FIRST DECIMAL
   lcd.setCursor(10,0);
   lcd.print("%");
-  delay(200);
+  //delay(200);
 
   lcd.setCursor(12, 0);
   lcd.print(STAMPA_P,0);//SHOW ONLY THE INTEGER PART
-  delay(200);
+  //delay(200);
+  
   // SERIAL METEO OUTPUT
 
   STAMPA_T= (temp()); 
   STAMPA_U= (readUMID());
   STAMPA_P = (pressure());
+  
+  String stringT = doubleToString(STAMPA_T,2);
+  String stringU = doubleToString(STAMPA_U,2);
+  String stringP = doubleToString(STAMPA_P,2);
 
-
+/*
   Serial.print("TEMPERATURA ");
   Serial.print(STAMPA_T);
   Serial.write(176);
@@ -123,18 +128,26 @@ void loop() {
   Serial.print("PRESSIONE ");
   Serial.print(STAMPA_P);
   Serial.println("mbar");
-  
+  */
   //DATA TRANSMISSION
-  client.print("POST");
-  client.print(" t =");
+  client.println("POST /ricevi");
+  client.print("t=");
   client.write(STAMPA_T);
-  client.print("&u =");
+  client.print("&u=");
   client.write(STAMPA_U);
-  client.println("&p =");
+  client.print("&p=");
   client.write(STAMPA_P);
-  client.println("Host: www.google.com");
+  client.println();
+  client.print("Content-Length:");
+  client.write(stringT.length()+stringU.length()+stringP.length())+8);
+  client.println("Host: 192.168.0.112");
   client.println("Connection: close");
   client.println();
+  Serial.println(sizeof(STAMPA_T)+(sizeof(STAMPA_U)+(sizeof(STAMPA_P)))+8);
+  if (client.available()) {
+    char c = client.read();
+    Serial.print(c);
+  }
   
   
 
@@ -183,11 +196,22 @@ float pressure(){
 
 
 
-
-
-
-
-
+//Rounds down (via intermediary integer conversion truncation)
+String doubleToString(double input, int decimalPlaces){
+    if(decimalPlaces!=0){
+      String string = String((int)(input*pow(10,decimalPlaces)));
+      if(abs(input)<1){
+        if(input>0)
+          string = "0"+string;
+        else if(input<0)
+          string = string.substring(0,1)+"0"+string.substring(1);
+      }
+      return string.substring(0,string.length()-decimalPlaces)+"."+string.substring(string.length()-decimalPlaces);
+    }
+    else {
+      return String((int)input);
+    }
+}
 
 
 
