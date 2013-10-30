@@ -1,4 +1,21 @@
+{# Creo l'array che contiene i link per il menu orizzontale. #}
+{%
+	set links = {
+		'Home Page': urlFor('Home Page'),
+		'Visualizza': urlFor('Visualizza')
+	}
+%}
+
+{% set routeName = app.router().getCurrentRoute().getName()|lower %}
+
+
+
 <nav id="nav">
-	<a href="{{ urlFor('HomePage') }}" class="current-page-item">Home Page</a>
-	<a href="{{ urlFor('Visualizza') }}">Visualizza</a>
+	{% for key, link in links %}
+	    <a href="{{ link }}" 
+		{% if  routeName == key|lower %}
+			class="current-page-item"
+		{% endif %}
+		>{{key}}</a>
+	{% endfor %}
 </nav>

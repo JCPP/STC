@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS Lettura(
 	ValoreLettura VARCHAR(50) NOT NULL,
 	DataLettura VARCHAR(18) NOT NULL,
 	UnitaDiMisuraLettura VARCHAR(30) NOT NULL,
-	DescrizioneSensore VARCHAR(30) NOT NULL,
 	IDSensore INTEGER,
 	FOREIGN KEY(IDSensore) REFERENCES Sensore(IDSensore)
 		ON UPDATE CASCADE

@@ -2,18 +2,29 @@
 
 //Home Page
 $app->get('/', function () use ($app) {
-	$app->render('index.twig');
-})->name("HomePage");
+	//Aggiungo il sensore al database
+	
+	/*
+	$sensoreDB = Model::factory('Sensore')->create();
+	$sensoreDB->NomeSensore = "Temperatura";
+	$sensoreDB->DescrizioneSensore = "Descrizione del sensore";
+	$sensoreDB->save();
+	*/
+	//print_r($app->router()->getCurrentRoute()->getName());
+	$app->render('index.twig', array(
+			'app' => $app
+	));
+})->name("Home Page");
+
 
 //Visualizzazione dei dati
 $app->get('/visualizza', function () use ($app) {
-	$app->render('visualizza.twig');
+	$app->render('visualizza.twig', array(
+			'app' => $app,
+			'sensori' => Model::factory('Sensore')->find_many()
+	));
 })->name("Visualizza");
 
-//Pagina non trovata
-$app->notFound(function () use ($app) {
-	$app->redirect('/');
-});
 
 //Ricevi dati
 $app->post('/ricevi', function () use ($app) {
@@ -38,3 +49,9 @@ $app->post('/ricevi', function () use ($app) {
 	echo ("Umidità: " . $umidita . "/n");
 	echo ("Pressione: " . $pressione . "/n");
 })->name("Ricevi");
+
+
+//Pagina non trovata
+$app->notFound(function () use ($app) {
+	$app->redirect('/');
+});
