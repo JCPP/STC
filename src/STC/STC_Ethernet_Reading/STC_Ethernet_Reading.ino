@@ -139,15 +139,18 @@ void loop() {
     connectToServer();
   }
   else{
-    
-    while (client.available()) {
-      char c = client.read();
-      Serial.print(c);
-    }
-    //Reconnect to server
-    connectToServer();
-    
     sendData(stringT, stringU, stringP);
+    
+    //Waiting until the server is connected
+    while(client.connected()){
+      while (client.available()) {
+        char c = client.read();
+        Serial.print(c);
+      }
+    }
+    
+    
+    client.stop();
 
     delay(sendDelay);
   }
