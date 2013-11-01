@@ -77,14 +77,14 @@ void setup() {
   
   // start the Ethernet connection:
   if (Ethernet.begin(mac) == 0) {
-    Serial.println("Failed to configure Ethernet using DHCP");
+    Serial.println(F("Failed to configure Ethernet using DHCP"));
     // no point in carrying on, so do nothing forevermore:
     // try to congifure using IP address instead of DHCP:
     Ethernet.begin(mac, ip);
   }
   // give the Ethernet shield a second to initialize:
   delay(1000);
-  Serial.println("connecting...");
+  Serial.println(F("connecting..."));
 
   
   connectToServer();
@@ -136,7 +136,6 @@ void loop() {
   
   //If connection is dead try to reconnect
   if(!client.connected()){
-    //Not connected
     connectToServer();
   }
   else{
@@ -145,7 +144,8 @@ void loop() {
       char c = client.read();
       Serial.print(c);
     }
-    Serial.println();
+    //Reconnect to server
+    connectToServer();
     
     sendData(stringT, stringU, stringP);
 
@@ -214,24 +214,24 @@ String doubleToString(double input, int decimalPlaces){
 
 //Send data of sensors
 void sendData(String temperatura, String umidita, String pressione){
-  Serial.println("Sending data to the server...");
+  Serial.println(F("Sending data to the server..."));
   
   String postData = "t=" + temperatura + "&u=" + umidita + "&p=" + pressione;
   
   //DATA TRANSMISSION
-  client.println("POST /ricevi HTTP/1.1");
-  client.println("Host: 192.168.1.3"); //Change this to the server address
-  client.println("Content-Type: application/x-www-form-urlencoded");
-  client.println("User-Agent: Arduino/1.0");
-  client.println("Connection: close");
-  client.print("Content-Length:");
+  client.println(F("POST /ricevi HTTP/1.1"));
+  client.println(F("Host: 192.168.1.3")); //Change this to the server address
+  client.println(F("Content-Type: application/x-www-form-urlencoded"));
+  client.println(F("User-Agent: Arduino/1.0"));
+  client.println(F("Connection: close"));
+  client.print(F("Content-Length:"));
   client.println(postData.length());
   
   client.println();
   client.print(postData);
   client.println();
   
-  Serial.println(postData.length());
+  //Serial.println(postData.length());
   Serial.println(postData);
 }
 
