@@ -1,6 +1,6 @@
 <?php
 /* Qui verranno create le tabelle utilizzando le funzioni di sqlite
- NOTA: Questa pagina dovrà  essere eliminata e non dovrà  essere inserita all'interno del sito almenocchè
+ NOTA: Questa pagina dovrÃ   essere eliminata e non dovrÃ   essere inserita all'interno del sito almenocchÃ¨
 non si utilizzi solo da parte dell'amministratore. Per questo facciamo i dovuti controlli.
 */
 

@@ -31,3 +31,29 @@ CREATE TABLE IF NOT EXISTS Lettura(
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
+
+
+
+
+/**
+* INSERIMENTO DATI
+*/
+
+/**
+* Inserimento dei sensori.
+*/
+
+INSERT OR IGNORE INTO 'Sensore'
+	('IDSensore', 'NomeSensore', 'DescrizioneSensore')
+VALUES
+	(1, 'Temperatura', 'Sensore della temperatura');
+
+INSERT OR IGNORE INTO 'Sensore'
+	('IDSensore', 'NomeSensore', 'DescrizioneSensore')
+VALUES
+	(2, 'Umidità', 'Sensore dell''umidità');
+
+INSERT OR IGNORE INTO 'Sensore'
+	('IDSensore', 'NomeSensore', 'DescrizioneSensore')
+VALUES
+	(3, 'Pressione', 'Sensore della pressione');
