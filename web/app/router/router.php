@@ -2,15 +2,6 @@
 
 //Home Page
 $app->get('/', function () use ($app) {
-	//Aggiungo il sensore al database
-	
-	/*
-	$sensoreDB = Model::factory('Sensore')->create();
-	$sensoreDB->NomeSensore = "Temperatura";
-	$sensoreDB->DescrizioneSensore = "Descrizione del sensore";
-	$sensoreDB->save();
-	*/
-	//print_r($app->router()->getCurrentRoute()->getName());
 	$app->render('index.twig', array(
 			'app' => $app
 	));
@@ -28,6 +19,7 @@ $app->get('/visualizza', function () use ($app) {
 
 //Ricevi dati
 $app->post('/ricevi', function () use ($app) {
+	
 	$postVars = $app->request()->post();
 	$temperatura = "";
 	$umidita = "";
@@ -48,6 +40,17 @@ $app->post('/ricevi', function () use ($app) {
 	echo ("Temperatura: " . $temperatura . "/n");
 	echo ("Umidità: " . $umidita . "/n");
 	echo ("Pressione: " . $pressione . "/n");
+	
+	//Inserisce i dati nel database
+	
+	/*
+	$sensoreDB = Model::factory('Sensore')->create();
+	$sensoreDB->NomeSensore = "Temperatura";
+	$sensoreDB->DescrizioneSensore = "Descrizione del sensore";
+	$sensoreDB->save();
+	*/
+	
+	
 })->name("Ricevi");
 
 

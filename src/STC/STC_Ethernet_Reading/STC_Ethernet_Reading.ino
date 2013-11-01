@@ -11,10 +11,10 @@ byte mac[] = { 0x90, 0xA2, 0xDA, 0xDE, 0xB2, 0x12 };
 // if you don't want to use DNS (and reduce your sketch size)
 // use the numeric IP instead of the name for the server:
 //IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
-char server[] = "192.168.0.112";    // name address for Google (using DNS)
+char server[] = "192.168.1.3";    // name address for Google (using DNS)
 
 // Set the static IP address to use if the DHCP fails to assign
-IPAddress ip(192,168,0,177);
+IPAddress ip(192,168,1,4);
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server 
@@ -31,6 +31,16 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 #define TEMP 2      //TEMPERATURE ACQUISITION ON ANALOG PIN 2
 #define UMID 1      //HUMIDITY ACQUISITION ON ANALOG PIN 1
 #define PRESS 0     //PRESSURE ACQUISITION ON ANALOG PIN 0
+
+/* Work around a bug with PROGMEM and PSTR where the compiler always
+ * generates warnings.
+ */
+#undef PROGMEM 
+#define PROGMEM __attribute__(( section(".progmem.data") )) 
+#undef PSTR 
+#define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];}))
+
+
 float val = 0.0;
 float T= 0.0;
 double umidita = 0.0;
@@ -57,6 +67,7 @@ byte degree[8] = { //  CHARACTER "°C" DEFINITION
   B01000,
   B00111,
 };
+int sendDelay = 10000; //Number of milliseconds
 
 void setup() {
   Serial.begin(9600);
@@ -75,20 +86,13 @@ void setup() {
   delay(1000);
   Serial.println("connecting...");
 
-  // if you get a connection, report back via serial:
-  if (client.connect(server, 80)) {
-    Serial.println("connected");
-  } 
-  else {
-    // kf you didn't get a connection to the server:
-    Serial.println("connection failed");
-  }
-
+  
+  connectToServer();
 }  
 
 void loop() {
   
-    // LCD METEO OUTPUT
+  // LCD METEO OUTPUT
 
   lcd.setCursor(0, 0);   
   lcd.print(STAMPA_T,1); //SHOW ONLY THE FIRST DECIMAL
@@ -107,15 +111,15 @@ void loop() {
   
   // SERIAL METEO OUTPUT
 
-  STAMPA_T= (temp()); 
-  STAMPA_U= (readUMID());
+  STAMPA_T = (temp()); 
+  STAMPA_U = (readUMID());
   STAMPA_P = (pressure());
   
   String stringT = doubleToString(STAMPA_T,2);
   String stringU = doubleToString(STAMPA_U,2);
   String stringP = doubleToString(STAMPA_P,2);
 
-/*
+  /*
   Serial.print("TEMPERATURA ");
   Serial.print(STAMPA_T);
   Serial.write(176);
@@ -129,29 +133,24 @@ void loop() {
   Serial.print(STAMPA_P);
   Serial.println("mbar");
   */
-  //DATA TRANSMISSION
-  client.println("POST /ricevi");
-  client.print("t=");
-  client.write(STAMPA_T);
-  client.print("&u=");
-  client.write(STAMPA_U);
-  client.print("&p=");
-  client.write(STAMPA_P);
-  client.println();
-  client.print("Content-Length:");
-  client.write(stringT.length()+stringU.length()+stringP.length())+8);
-  client.println("Host: 192.168.0.112");
-  client.println("Connection: close");
-  client.println();
-  Serial.println(sizeof(STAMPA_T)+(sizeof(STAMPA_U)+(sizeof(STAMPA_P)))+8);
-  if (client.available()) {
-    char c = client.read();
-    Serial.print(c);
+  
+  //If connection is dead try to reconnect
+  if(!client.connected()){
+    //Not connected
+    connectToServer();
   }
-  
-  
+  else{
+    
+    while (client.available()) {
+      char c = client.read();
+      Serial.print(c);
+    }
+    Serial.println();
+    
+    sendData(stringT, stringU, stringP);
 
-
+    delay(sendDelay);
+  }
 }
 
 
@@ -213,10 +212,42 @@ String doubleToString(double input, int decimalPlaces){
     }
 }
 
+//Send data of sensors
+void sendData(String temperatura, String umidita, String pressione){
+  Serial.println("Sending data to the server...");
+  
+  String postData = "t=" + temperatura + "&u=" + umidita + "&p=" + pressione;
+  
+  //DATA TRANSMISSION
+  client.println("POST /ricevi HTTP/1.1");
+  client.println("Host: 192.168.1.3"); //Change this to the server address
+  client.println("Content-Type: application/x-www-form-urlencoded");
+  client.println("User-Agent: Arduino/1.0");
+  client.println("Connection: close");
+  client.print("Content-Length:");
+  client.println(postData.length());
+  
+  client.println();
+  client.print(postData);
+  client.println();
+  
+  Serial.println(postData.length());
+  Serial.println(postData);
+}
 
 
-
-
+//Connect to server
+void connectToServer(){
+  // if you get a connection, report back via serial:
+  if (client.connect(server, 80)) {
+    Serial.println("connected");
+  } 
+  else {
+    // if you didn't get a connection to the server:
+    Serial.println("connection failed..reconnecting");
+    client.stop();
+  }
+}
 
 
 
