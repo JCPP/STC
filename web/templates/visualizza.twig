@@ -5,24 +5,7 @@
 {% block contenuto %}
 <section>
 	<h2>Visualizza i dati</h2>
-	
-	{# Indice dei sensori disponibili 
-	<div class="4u">
-		<section>
-			<h2>Sensori</h2>
-			{% if sensori %}
-				<ul class="link-list">
-				{% for sensore in sensori %}
-						<li><a href="#">{{ sensore.NomeSensore|raw }}</a> ({{ sensore.DescrizioneSensore|raw }})</li>
-						
-				{% endfor %}
-				</ul>
-			{% else %}
-				Nessun sensore trovato.
-			{% endif %}
-		</section>
-	</div>
-	#}
+
 	{# Chart #}
 	<div class="12u">
 		<section>
@@ -30,19 +13,22 @@
 			<div class="flot-container">
 				<div id="placeholder" class="flot-placeholder"></div>
 			</div>
-			{#
-			{% if sensori %}
-				<ul class="link-list">
-				{% for sensore in sensori %}
-						<li><a href="#">{{ sensore.NomeSensore|raw }}</a> ({{ sensore.DescrizioneSensore|raw }})</li>
-						
-				{% endfor %}
-				</ul>
-			{% else %}
-				Nessun sensore trovato.
-			{% endif %}
-			#}
 		</section>
 	</div>
-</section>
+	
+	
+{% endblock %}
+
+
+{% block contenuto_aggiuntivo %}
+{# Bottoni #}
+<div class="row main-row">
+	<div class="12u">
+		<section>
+			<h2>Controlli</h2>
+			<button id="realtime_button">Realtime</button>
+			<button id="complete_button">Prospettiva completa</button>
+		</section>
+	</div>
+</div>
 {% endblock %}

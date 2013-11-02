@@ -6,5 +6,5 @@
 *
 */
 class Lettura extends Model{
-        public static $_id_column = 'IDLettura';
+	public static $_id_column = 'IDLettura';
 }
