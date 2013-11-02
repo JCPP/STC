@@ -1,4 +1,8 @@
-//CODE MADE BY VINCENZO MENDOLA USING THE SAME RTC LIBRARY AND RTC CODE MADE BY FUTURA ELETTRONICA//
+/*
+STC - Statistiche Territoriali Climatiche.
+Created by Matteo Calò, Davide Pastore and Alessandro Pendinelli on October, 2013.
+Released into the public domain.
+*/
 
 // LIBRARIES
 #include <LiquidCrystal.h>
